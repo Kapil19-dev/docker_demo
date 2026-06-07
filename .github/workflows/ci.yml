@@ -1,0 +1,29 @@
+name: Spring Boot CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Give execute permission
+        run: chmod +x gradlew
+
+      - name: Build Application
+        run: ./gradlew build
