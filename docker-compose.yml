@@ -2,12 +2,11 @@ services:
 
   postgres:
     image: postgres:16
-    container_name: postgres-container
 
     environment:
-      DB_URL: ${DB_URL}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_URL}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
 
     ports:
       - "5432:5432"
@@ -23,7 +22,6 @@ services:
 
   redis:
     image: redis:7
-    container_name: redis-container
 
     ports:
       - "6379:6379"
@@ -35,11 +33,12 @@ services:
       retries: 5
 
   backend:
+    profiles:
+      - app
+
     build:
       context: .
       dockerfile: Dockerfile
-
-    container_name: springboot-container
 
     ports:
       - "8080:8080"
@@ -53,7 +52,6 @@ services:
     depends_on:
       - postgres
       - redis
-
 
 volumes:
   postgres-data:

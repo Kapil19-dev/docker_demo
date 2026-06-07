@@ -25,8 +25,17 @@ jobs:
       - name: Give execute permission
         run: chmod +x gradlew
 
+      - name: Start Postgres and Redis
+        run: docker compose up -d
+
+      - name: Wait for services
+        run: sleep 20
+
+      - name: Run Tests
+        run: ./gradlew test
+
       - name: Build Application
-        run: ./gradlew build -x test
+        run: ./gradlew build
 
       - name: Build Docker Image
         run: docker build -t kapsy19/docker_demo:v1 .
@@ -36,3 +45,7 @@ jobs:
 
       - name: Push Docker Image
         run: docker push kapsy19/docker_demo:v1
+
+      - name: Stop Containers
+        run: docker compose down
+
